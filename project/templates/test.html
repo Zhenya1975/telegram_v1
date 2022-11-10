@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Converter</title>
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
@@ -62,12 +62,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.min.js"></script>
   <script>
+    saved_data = {{ saved_data | tojson }}
     $(document).ready(function(){
         $('.my-select').selectpicker();
-        // console.log({{ currency_from }})
-        // var selected_from_currency = {{ currency_from }}
-        $('.from_currency').selectpicker('val', 'KZT');
+        var money_qty = saved_data['money_qty']
+        var currency_from = saved_data['currency_from']
+        var currency_to = saved_data['currency_to']
 
+        $('#qty').val(money_qty)
+        $('.from_currency').selectpicker('val', currency_from);
+        $('.to_currency').selectpicker('val', currency_to);
     })
     </script>
   </body>
