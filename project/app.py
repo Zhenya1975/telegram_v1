@@ -14,6 +14,7 @@ app = Flask(__name__)
 app.secret_key = 'secret string'
 
 
+
 # db = extensions.db
 
 # migrate = extensions.migrate
