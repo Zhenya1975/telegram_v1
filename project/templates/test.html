@@ -16,17 +16,21 @@
                 <form method="POST" action="{{ url_for('home.convert_currency')}}">
                   <div class="mb-3">
                     <label for="qty" class="form-label">Количество</label>
-                    <input type="number" class="form-control" id="qty" name="money_requested_qty" value="1000">
+                    <input type="number" class="form-control" id="qty" name="money_requested_qty" value= {{ money_qty }}>
                   </div>
                   <div class="mb-3">
-                     <div class="form-group">
-                         <label for="select_from_currency" class="form-label">Из</label>
-                          <select class="my-select selectpicker form-control" data-width="100%" id="select_from_currency" data-live-search="true" title="Валюта Из" name="currency_from">
-                            {% for key, value in currency_dict.items() %}
-                                  <option value={{value}}>{{key}}: {{value}}</option>
-                             {% endfor %}
 
-                         </select>
+                      <div class="form-group">
+                         <label for="select_from_currency" class="form-label">Из</label>
+                          <div class="from_currency_select_div">
+                              <select class="my-select selectpicker from_currency form-control" data-width="100%" id="select_from_currency" data-live-search="true" title="Валюта Из" name="currency_from">
+
+                                {% for key, value in currency_dict.items() %}
+                                      <option value={{value}}>{{key}}: {{value}}</option>
+                                 {% endfor %}
+
+                             </select>
+                          </div>
                      </div>
 <!--                    <input class="form-control" list="from_currency_datalistOptions" id="from_currency_list" placeholder="Для поиска начните ввод...">-->
 <!--                    <datalist id="from_currency_datalistOptions">-->
@@ -54,6 +58,8 @@
   <script>
     $(document).ready(function(){
         $('.my-select').selectpicker();
+        // var selected_from_currency = {{ currency_from }}
+        $('.selectpicker').selectpicker('val', 'KZT');
 
     })
     </script>

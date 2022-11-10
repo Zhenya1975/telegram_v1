@@ -16,15 +16,27 @@ def test():
     with open('currency_dict.json', 'r') as openfile:
         # Reading from json file
         currency_dict = json.load(openfile)
+
+    with open('currency_dict_2.json', 'r') as openfile:
+        # Reading from json file
+        currency_dict_2 = json.load(openfile)
+
     # print(currency_dict)
-    return render_template("test.html", currency_dict=currency_dict)
+    with open('saved_data.json', 'r') as openfile:
+        # Reading from json file
+        saved_data = json.load(openfile)
+        money_qty = saved_data["money_qty"]
+        currency_from = saved_data["currency_from"]
+        currency_to = saved_data["currency_to"]
+    return render_template("test.html", currency_dict=currency_dict, currency_dict_2=currency_dict_2, money_qty=money_qty, currency_from=currency_from, currency_to=currency_to)
 
 
 @home.route('/convert_currency', methods=["POST", "GET"])
 def convert_currency():
     if request.method == 'POST':
         money_requested_qty = float(request.form.get('money_requested_qty'))
-
+        currency_from = request.form.get('currency_from')
+        # print(currency_from)
         return redirect(url_for('home.test'))
 
 @home.route('/currency')
