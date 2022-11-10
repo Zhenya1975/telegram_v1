@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, abort, request, jsonify, flash
-import requests
 # from models.models import SportDB, LeagueDB, TeamsDB, Match_statusDB, MatchesDB
-
+import requests
 from extensions import extensions
+import json
 
 # db = extensions.db
 # db.create_all()
@@ -10,30 +10,49 @@ from extensions import extensions
 home = Blueprint('home', __name__, template_folder='templates')
 
 # socketio = extensions.socketio
-def telegram_bot_sendtext(bot_message, bot_token, bot_chatID):
-    bot_token = bot_token
-    bot_chatID = bot_chatID
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(bot_chatID) + '&parse_mode=Markdown&text=' + bot_message
-    response = requests.get(send_text)
-    return response.json()
-
+amount = 0
 @home.route('/')
 def test():
-    url = "https://api.telegram.org/bot5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU/getUpdates"
-    chats_data = requests.get(url)
-    chats_data_json = chats_data.json()
-    list_of_updates = chats_data_json['result']
-    chat_id = 0
-    first_name = ""
-    for update in list_of_updates:
-        chat_id = update['message']['chat']['id']
-        first_name = update['message']['chat']['first_name']
+    with open('currency_dict.json', 'r') as openfile:
+        # Reading from json file
+        currency_dict = json.load(openfile)
 
-    # print(f"{first_name}: {chat_id}")
-    bot_message = 'хуй'
-    bot_token = '5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU'
-    bot_chatID = chat_id
-    send_message_json = telegram_bot_sendtext(bot_message, bot_token, bot_chatID)
-    print(send_message_json)
+    with open('currency_dict_2.json', 'r') as openfile:
+        # Reading from json file
+        currency_dict_2 = json.load(openfile)
 
+    # print(currency_dict)
+    with open('saved_data.json', 'r') as openfile:
+        # Reading from json file
+        saved_data = json.load(openfile)
+        money_qty = saved_data["money_qty"]
+        currency_from = saved_data["currency_from"]
+        currency_to = saved_data["currency_to"]
+    return render_template("test.html", currency_dict=currency_dict, currency_dict_2=currency_dict_2, money_qty=money_qty, currency_from=currency_from, currency_to=currency_to)
+
+
+@home.route('/convert_currency', methods=["POST", "GET"])
+def convert_currency():
+    if request.method == 'POST':
+        money_requested_qty = float(request.form.get('money_requested_qty'))
+        currency_from = request.form.get('currency_from')
+        # print(currency_from)
+        return redirect(url_for('home.test'))
+
+@home.route('/currency')
+def currency():
+
+    url = "https://api.apilayer.com/exchangerates_data/convert?to=KZT&from=RUB&amount=100"
+
+
+    payload = {}
+    headers = {
+        "apikey": "uBkOvOx3IUayHeUSd4fcDMjsXQnvh6Or"
+    }
+
+    # response = requests.request("GET", url, headers=headers, data=payload)
+
+    # status_code = response.status_code
+    # result = response.text
+    # print(result)
     return render_template("test.html")
