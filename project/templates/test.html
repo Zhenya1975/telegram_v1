@@ -24,7 +24,11 @@
 <!--                      {% for participant in participants_data_for_selection %}-->
 <!--                        <option value={{ participant.participant_id }}>{{ participant.participant_first_name }} {{ participant.participant_last_name }}</option>-->
 <!--                       {% endfor %}-->
-                    <option value="12">текст опции</option>
+<!--                    <option value="12">текст опции</option>-->
+                        {% for key, value in currency_dict.items() %}
+                              <option value={{value}}>{{key}}: {{value}}</option>
+                         {% endfor %}
+
                      </select>
 <!--                    <input class="form-control" list="from_currency_datalistOptions" id="from_currency_list" placeholder="Для поиска начните ввод...">-->
 <!--                    <datalist id="from_currency_datalistOptions">-->
