@@ -41,9 +41,33 @@ def convert_currency():
         saved_data_dict['money_qty'] = money_requested_qty
         saved_data_dict['currency_from'] = currency_from
         saved_data_dict['currency_to'] = currency_to
+
+
+        url = f"https://api.apilayer.com/exchangerates_data/convert?to={currency_to}&from={currency_from}&amount={money_requested_qty}"
+        payload = {}
+        headers = {
+            "apikey": "uBkOvOx3IUayHeUSd4fcDMjsXQnvh6Or"
+        }
+
+        response = requests.request("GET", url, headers=headers, data=payload)
+
+        # status_code = response.status_code
+        result = response.text
+        result_json = response.json()
+        currency_from = result_json['query']['from']
+        currency_to = result_json['query']['to']
+        amount = result_json['query']['amount']
+        culc_result = result_json['result']
+        saved_data_dict['amount'] = amount
+        saved_data_dict['currency_from'] = currency_from
+        saved_data_dict['currency_to'] = currency_to
+        saved_data_dict['result'] = culc_result
+
         with open("saved_data.json", "w") as jsonFile:
             json.dump(saved_data_dict, jsonFile)
+
         return redirect(url_for('home.test'))
+
 
 @home.route('/currency')
 def currency():

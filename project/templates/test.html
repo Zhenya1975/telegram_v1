@@ -48,9 +48,14 @@
                      </div>
                   </div>
 
-
                   <button type="submit" class="btn btn-primary">Рассчитать</button>
                 </form>
+                <div class="result_calc">
+
+                    <p class="result_p">
+
+                      </p>
+                  </div>
             </div>
         </div>
     </div>
@@ -68,10 +73,14 @@
         var money_qty = saved_data['money_qty']
         var currency_from = saved_data['currency_from']
         var currency_to = saved_data['currency_to']
+        var result = saved_data['result']
+        result_text = money_qty + " " + currency_from + " = " + result + " " + currency_to
+        $('.result_calc').append(result_text)
 
         $('#qty').val(money_qty)
         $('.from_currency').selectpicker('val', currency_from);
         $('.to_currency').selectpicker('val', currency_to);
+
     })
     </script>
   </body>
