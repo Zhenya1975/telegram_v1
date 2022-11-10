@@ -19,17 +19,15 @@
                     <input type="number" class="form-control" id="qty" name="money_requested_qty" value="1000">
                   </div>
                   <div class="mb-3">
-<!--                    <label for="from_currency_list" class="form-label">Из</label>-->
-                     <select class="my-select selectpicker w-100" id="select_from_currency" data-live-search="true" title="Валюта Из" name="currency_from">
-<!--                      {% for participant in participants_data_for_selection %}-->
-<!--                        <option value={{ participant.participant_id }}>{{ participant.participant_first_name }} {{ participant.participant_last_name }}</option>-->
-<!--                       {% endfor %}-->
-<!--                    <option value="12">текст опции</option>-->
-                        {% for key, value in currency_dict.items() %}
-                              <option value={{value}}>{{key}}: {{value}}</option>
-                         {% endfor %}
+                     <div class="form-group">
+                         <label for="select_from_currency" class="form-label">Из</label>
+                          <select class="my-select selectpicker form-control" data-width="100%" id="select_from_currency" data-live-search="true" title="Валюта Из" name="currency_from">
+                            {% for key, value in currency_dict.items() %}
+                                  <option value={{value}}>{{key}}: {{value}}</option>
+                             {% endfor %}
 
-                     </select>
+                         </select>
+                     </div>
 <!--                    <input class="form-control" list="from_currency_datalistOptions" id="from_currency_list" placeholder="Для поиска начните ввод...">-->
 <!--                    <datalist id="from_currency_datalistOptions">-->
 <!--                      <option value="San Francisco">-->

@@ -25,8 +25,7 @@ def convert_currency():
     if request.method == 'POST':
         money_requested_qty = float(request.form.get('money_requested_qty'))
 
-
-        return redirect(url_for('home.currency'))
+        return redirect(url_for('home.test'))
 
 @home.route('/currency')
 def currency():
