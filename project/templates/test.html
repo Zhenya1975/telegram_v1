@@ -32,14 +32,20 @@
                              </select>
                           </div>
                      </div>
-<!--                    <input class="form-control" list="from_currency_datalistOptions" id="from_currency_list" placeholder="Для поиска начните ввод...">-->
-<!--                    <datalist id="from_currency_datalistOptions">-->
-<!--                      <option value="San Francisco">-->
-<!--                      <option value="New York">-->
-<!--                      <option value="Seattle">-->
-<!--                      <option value="Los Angeles">-->
-<!--                      <option value="Chicago">-->
-<!--                    </datalist>-->
+
+
+                      <div class="form-group">
+                         <label for="select_to_currency" class="form-label">В</label>
+                          <div class="to_currency_select_div">
+                              <select class="my-select selectpicker to_currency form-control" data-width="100%" id="select_to_currency" data-live-search="true" title="Валюта В" name="currency_to">
+
+                                {% for key, value in currency_dict.items() %}
+                                      <option value={{value}}>{{key}}: {{value}}</option>
+                                 {% endfor %}
+
+                             </select>
+                          </div>
+                     </div>
                   </div>
 
 
@@ -58,8 +64,9 @@
   <script>
     $(document).ready(function(){
         $('.my-select').selectpicker();
+        // console.log({{ currency_from }})
         // var selected_from_currency = {{ currency_from }}
-        $('.selectpicker').selectpicker('val', 'KZT');
+        $('.from_currency').selectpicker('val', 'KZT');
 
     })
     </script>
