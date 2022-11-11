@@ -35,24 +35,33 @@ def test():
     # print(requests.get(url).json())
     responce_updates = requests.get(url).json()
     # {'ok': True, 'result': []}
-    result_updates = responce_updates['result']
-
-    if len(result_updates) > 0:
-        chats_data_list = []
-        for result_record in result_updates:
-            temp_dict = {}
-            chat_id = result_record['message']['chat']['id']
-            first_name = result_record['message']['chat']['first_name']
-            username = result_record['message']['chat']['username']
-            temp_dict['chat_id'] = chat_id
-            temp_dict['first_name'] = first_name
-            temp_dict['username'] = username
-            chats_data_list.append(temp_dict)
-
-        with open("chats_data.json", "w") as jsonFile:
-            json.dump(chats_data_list, jsonFile)
-    else:
-        print('нет данных о чатах')
+    # result_updates = responce_updates['result']
+    #
+    # if len(result_updates) > 0:
+    #     chats_data_list = []
+    #     for result_record in result_updates:
+    #         temp_dict = {}
+    #         message = result_record['message']
+    #         print(message)
+    #         try:
+    #             message = result_record['message']
+    #             # print(message)
+    #         except:
+    #             pass
+    #
+    #         chat_id = result_record['message']['chat']['id']
+    #         print(chat_id)
+    #         first_name = result_record['message']['chat']['first_name']
+    #         username = result_record['message']['chat']['username']
+    #         temp_dict['chat_id'] = chat_id
+    #         temp_dict['first_name'] = first_name
+    #         temp_dict['username'] = username
+    #         chats_data_list.append(temp_dict)
+    #
+    #     with open("chats_data.json", "w") as jsonFile:
+    #         json.dump(chats_data_list, jsonFile)
+    # else:
+    #     print('нет данных о чатах')
 
     with open('chats_data.json', 'r') as openfile:
         # Reading from json file
