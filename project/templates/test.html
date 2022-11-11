@@ -14,12 +14,14 @@
         <div class="row">
             <div class="col-6">
                 <form method="POST" action="{{ url_for('home.convert_currency')}}">
-                  <div class="mb-3">
-                    <label for="qty" class="form-label">Количество</label>
-                    <input type="number" class="form-control" id="qty" name="money_requested_qty" value= {{ money_qty }}>
-                  </div>
-                  <div class="mb-3">
 
+                    <div class="mb-3">
+                        <label for="qty" class="form-label">Количество</label>
+                        <input type="number" class="form-control" id="qty" name="money_requested_qty" value= {{ money_qty }}>
+                    </div>
+
+
+                  <div class="mb-3">
                       <div class="form-group">
                          <label for="select_from_currency" class="form-label">Из</label>
                           <div class="from_currency_select_div">
@@ -49,13 +51,32 @@
                   </div>
 
                   <button type="submit" class="btn btn-primary">Рассчитать</button>
+
                 </form>
-                <div class="result_calc">
 
-                    <p class="result_p">
+                <div class="result_calc" style="margin-top: 15px"></div>
+                <hr>
 
-                      </p>
-                  </div>
+
+                    <form method="POST" action="{{ url_for('home.send_telegram_message')}}">
+                        <div class="mb-3">
+                            <div class="form-group">
+                                                <div class="telegram_receiver_select_div">
+                                                        <label for="telegram_receiver" class="form-label">Получатель</label>
+                                                          <select class="my-select selectpicker telegram_receiver form-control" data-width="100%" id="telegram_receiver" data-live-search="true" title="Получатель" name="telegram_receiver">
+
+                                                            {% for key, value in chat_data_dict.items() %}
+                                                                  <option value={{key}}>{{ value['first_name'] }} {{ value['username'] }}</option>
+                                                             {% endfor %}
+
+                                                         </select>
+                                               </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+
+                    </form>
             </div>
         </div>
     </div>

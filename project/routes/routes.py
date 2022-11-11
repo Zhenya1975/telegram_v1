@@ -11,6 +11,9 @@ home = Blueprint('home', __name__, template_folder='templates')
 
 # socketio = extensions.socketio
 amount = 0
+
+
+
 @home.route('/')
 def test():
     with open('currency_dict.json', 'r') as openfile:
@@ -28,8 +31,55 @@ def test():
         money_qty = saved_data["money_qty"]
         currency_from = saved_data["currency_from"]
         currency_to = saved_data["currency_to"]
-    return render_template("test.html", currency_dict=currency_dict, currency_dict_2=currency_dict_2, saved_data=saved_data)
 
+    # Обрабатываем список получателей сообщений
+    TOKEN = "5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU"
+    url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
+    # print(requests.get(url).json())
+    responce_updates = requests.get(url).json()
+    # {'ok': True, 'result': []}
+    result_updates = responce_updates['result']
+
+    if len(result_updates) > 0:
+        chats_data_list = []
+        for result_record in result_updates:
+            temp_dict = {}
+            chat_id = result_record['message']['chat']['id']
+            first_name = result_record['message']['chat']['first_name']
+            username = result_record['message']['chat']['username']
+            temp_dict['chat_id'] = chat_id
+            temp_dict['first_name'] = first_name
+            temp_dict['username'] = username
+            chats_data_list.append(temp_dict)
+
+        with open("chats_data.json", "w") as jsonFile:
+            json.dump(chats_data_list, jsonFile)
+    else:
+        print('нет данных о чатах')
+
+    with open('chats_data.json', 'r') as openfile:
+        # Reading from json file
+        chats_data = json.load(openfile)
+
+    chat_data_dict = {}
+    for chat_data in chats_data:
+        temp_dict = {}
+        chat_id = chat_data['chat_id']
+        temp_dict['first_name'] = chat_data['first_name']
+        temp_dict['username'] = chat_data['username']
+        chat_data_dict[chat_id] = temp_dict
+
+
+
+    return render_template("test.html", currency_dict=currency_dict, saved_data=saved_data, chat_data_dict = chat_data_dict)
+
+
+@home.route('/send_telegram_message', methods=["POST", "GET"])
+def send_telegram_message():
+    if request.method == 'POST':
+        telegram_chat_id = int(request.form.get('telegram_receiver'))
+        print(telegram_chat_id)
+        return redirect(url_for('home.test'))
 
 @home.route('/convert_currency', methods=["POST", "GET"])
 def convert_currency():
