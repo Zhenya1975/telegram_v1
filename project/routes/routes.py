@@ -77,8 +77,23 @@ def test():
 @home.route('/send_telegram_message', methods=["POST", "GET"])
 def send_telegram_message():
     if request.method == 'POST':
+        TOKEN = "5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU"
         telegram_chat_id = int(request.form.get('telegram_receiver'))
-        print(telegram_chat_id)
+
+        # получаем данные о пересчете курсов
+        with open('saved_data.json', 'r') as openfile:
+            # Reading from json file
+            saved_data = json.load(openfile)
+            money_qty = saved_data["money_qty"]
+            currency_from = saved_data["currency_from"]
+            currency_to = saved_data["currency_to"]
+            result = saved_data["result"]
+
+        message = f"{money_qty} {currency_from} = {result} {currency_to}"
+        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={telegram_chat_id}&text={message}"
+        # print(requests.get(url).json()) # this sends the message
+        requests.get(url)
+
         return redirect(url_for('home.test'))
 
 @home.route('/convert_currency', methods=["POST", "GET"])
