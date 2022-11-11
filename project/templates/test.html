@@ -59,6 +59,7 @@
                 </form>
 
                 <div class="result_calc" style="margin-top: 15px"></div>
+                <div class="remaining" style="margin-top: 15px"></div>
                 <hr>
 
 
@@ -101,8 +102,12 @@
         var currency_to_id = saved_data['currency_to_id']
         var currency_to = saved_data['currency_to']
         var result = saved_data['result']
+        var remainings = saved_data['remaining_in_month']
+
         result_text = money_qty + " " + currency_from + " = " + result + " " + currency_to
+        remaining_text = "Осталось запросов: " + remainings
         $('.result_calc').append(result_text)
+        $('.remaining').append(remaining_text)
 
         $('#qty').val(money_qty)
         $('.from_currency').selectpicker('val', currency_from_id);

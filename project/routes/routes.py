@@ -129,9 +129,13 @@ def convert_currency():
 
         response = requests.request("GET", url, headers=headers, data=payload)
 
+        # print(response.headers)
+        headers = response.headers
+        remaining_in_month = headers['X-RateLimit-Remaining-Month']
         # status_code = response.status_code
         result = response.text
         result_json = response.json()
+        # print(result_json)
         currency_from = result_json['query']['from']
         currency_to = result_json['query']['to']
         amount = result_json['query']['amount']
@@ -140,6 +144,8 @@ def convert_currency():
         saved_data_dict['currency_from'] = currency_from
         saved_data_dict['currency_to'] = currency_to
         saved_data_dict['result'] = round(float(culc_result), 2)
+        saved_data_dict['remaining_in_month'] = remaining_in_month
+
 
         with open("saved_data.json", "w") as jsonFile:
             json.dump(saved_data_dict, jsonFile)
