@@ -28,9 +28,6 @@ def test():
     with open('saved_data.json', 'r') as openfile:
         # Reading from json file
         saved_data = json.load(openfile)
-        money_qty = saved_data["money_qty"]
-        currency_from = saved_data["currency_from"]
-        currency_to = saved_data["currency_to"]
 
     # Обрабатываем список получателей сообщений
     TOKEN = "5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU"
@@ -70,8 +67,7 @@ def test():
         chat_data_dict[chat_id] = temp_dict
 
 
-
-    return render_template("test.html", currency_dict=currency_dict, saved_data=saved_data, chat_data_dict = chat_data_dict)
+    return render_template("test.html", currency_dict_2=currency_dict_2, currency_dict=currency_dict, saved_data=saved_data, chat_data_dict = chat_data_dict)
 
 
 @home.route('/send_telegram_message', methods=["POST", "GET"])
@@ -101,10 +97,26 @@ def convert_currency():
     if request.method == 'POST':
         saved_data_dict = {}
         money_requested_qty = float(request.form.get('money_requested_qty'))
-        currency_from = request.form.get('currency_from')
-        currency_to = request.form.get('currency_to')
+        currency_from_id = request.form.get('currency_from')
+        currency_to_id = request.form.get('currency_to')
         saved_data_dict['money_qty'] = money_requested_qty
+        saved_data_dict['currency_from_id'] = currency_from_id
+        saved_data_dict['currency_to_id'] = currency_to_id
+
+        # читаем список валют
+        with open('currency_dict_2.json', 'r') as openfile:
+            # Reading from json file
+            currency_dict_2 = json.load(openfile)
+        currency_from_data_dict = currency_dict_2[currency_from_id]
+        currency_from = ""
+        for key, value in currency_from_data_dict.items():
+            currency_from = value
         saved_data_dict['currency_from'] = currency_from
+
+        currency_to_data_dict = currency_dict_2[currency_to_id]
+        currency_to = ""
+        for key, value in currency_to_data_dict.items():
+            currency_to = value
         saved_data_dict['currency_to'] = currency_to
 
 
@@ -126,7 +138,7 @@ def convert_currency():
         saved_data_dict['amount'] = amount
         saved_data_dict['currency_from'] = currency_from
         saved_data_dict['currency_to'] = currency_to
-        saved_data_dict['result'] = culc_result
+        saved_data_dict['result'] = round(float(culc_result), 2)
 
         with open("saved_data.json", "w") as jsonFile:
             json.dump(saved_data_dict, jsonFile)

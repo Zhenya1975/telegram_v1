@@ -27,9 +27,11 @@
                           <div class="from_currency_select_div">
                               <select class="my-select selectpicker from_currency form-control" data-width="100%" id="select_from_currency" data-live-search="true" title="Валюта Из" name="currency_from">
 
-                                {% for key, value in currency_dict.items() %}
-                                      <option value={{value}}>{{key}}: {{value}}</option>
-                                 {% endfor %}
+                                {% for key, data in currency_dict_2.items() %}
+                                    {% for country, currency_code in data.items() %}
+                                      <option value={{key}}>{{country}}: {{currency_code}}</option>
+                                     {% endfor %}
+                                  {% endfor %}
 
                              </select>
                           </div>
@@ -41,9 +43,11 @@
                           <div class="to_currency_select_div">
                               <select class="my-select selectpicker to_currency form-control" data-width="100%" id="select_to_currency" data-live-search="true" title="Валюта В" name="currency_to">
 
-                                {% for key, value in currency_dict.items() %}
-                                      <option value={{value}}>{{key}}: {{value}}</option>
-                                 {% endfor %}
+                                {% for key, data in currency_dict_2.items() %}
+                                    {% for country, currency_code in data.items() %}
+                                      <option value={{key}}>{{country}}: {{currency_code}}</option>
+                                     {% endfor %}
+                                  {% endfor %}
 
                              </select>
                           </div>
@@ -93,14 +97,16 @@
         $('.my-select').selectpicker();
         var money_qty = saved_data['money_qty']
         var currency_from = saved_data['currency_from']
+        var currency_from_id = saved_data['currency_from_id']
+        var currency_to_id = saved_data['currency_to_id']
         var currency_to = saved_data['currency_to']
         var result = saved_data['result']
         result_text = money_qty + " " + currency_from + " = " + result + " " + currency_to
         $('.result_calc').append(result_text)
 
         $('#qty').val(money_qty)
-        $('.from_currency').selectpicker('val', currency_from);
-        $('.to_currency').selectpicker('val', currency_to);
+        $('.from_currency').selectpicker('val', currency_from_id);
+        $('.to_currency').selectpicker('val', currency_to_id);
 
     })
     </script>
