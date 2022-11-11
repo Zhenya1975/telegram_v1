@@ -32,51 +32,43 @@ def test():
     # Обрабатываем список получателей сообщений
     TOKEN = "5762791939:AAGJvJaY7FrUNpZ5OaZT9NtAmnVPhj2LgqU"
     url = f"https://api.telegram.org/bot{TOKEN}/getUpdates"
-    # print(requests.get(url).json())
-    responce_updates = requests.get(url).json()
-    # {'ok': True, 'result': []}
-    # result_updates = responce_updates['result']
-    #
-    # if len(result_updates) > 0:
-    #     chats_data_list = []
-    #     for result_record in result_updates:
-    #         temp_dict = {}
-    #         message = result_record['message']
-    #         print(message)
-    #         try:
-    #             message = result_record['message']
-    #             # print(message)
-    #         except:
-    #             pass
-    #
-    #         chat_id = result_record['message']['chat']['id']
-    #         print(chat_id)
-    #         first_name = result_record['message']['chat']['first_name']
-    #         username = result_record['message']['chat']['username']
-    #         temp_dict['chat_id'] = chat_id
-    #         temp_dict['first_name'] = first_name
-    #         temp_dict['username'] = username
-    #         chats_data_list.append(temp_dict)
-    #
-    #     with open("chats_data.json", "w") as jsonFile:
-    #         json.dump(chats_data_list, jsonFile)
-    # else:
-    #     print('нет данных о чатах')
+    bot_updates = requests.get(url).json()
+    bot_updates_results = bot_updates['result']
+
+    chat_data_dict = {}
+    for bot_updates_result in bot_updates_results:
+        if 'message' in list(bot_updates_result.keys()):
+            temp_dict = {}
+            chat_id = bot_updates_result['message']['from']['id']
+            try:
+                first_name = bot_updates_result['message']['from']['first_name']
+                temp_dict['first_name'] = first_name
+            except:
+                pass
+            try:
+                username = bot_updates_result['message']['from']['username']
+                temp_dict['username'] = username
+            except:
+                pass
+            chat_data_dict[chat_id] = temp_dict
+
+    with open("chats_data.json", "w", encoding='utf-8') as jsonFile:
+        json.dump(chat_data_dict, jsonFile, ensure_ascii=False)
 
     with open('chats_data.json', 'r') as openfile:
         # Reading from json file
         chats_data = json.load(openfile)
 
     chat_data_dict = {}
-    for chat_data in chats_data:
+    for chat_id, chat_data_value in chats_data.items():
         temp_dict = {}
-        chat_id = chat_data['chat_id']
-        temp_dict['first_name'] = chat_data['first_name']
-        temp_dict['username'] = chat_data['username']
+        chat_id = int(chat_id)
+        temp_dict['first_name'] = chat_data_value['first_name']
+        temp_dict['username'] = chat_data_value['username']
         chat_data_dict[chat_id] = temp_dict
 
 
-    return render_template("test.html", currency_dict_2=currency_dict_2, currency_dict=currency_dict, saved_data=saved_data, chat_data_dict = chat_data_dict)
+    return render_template("test.html", currency_dict_2=currency_dict_2, currency_dict=currency_dict, saved_data=saved_data, chat_data_dict = chats_data)
 
 
 @home.route('/send_telegram_message', methods=["POST", "GET"])
@@ -97,7 +89,7 @@ def send_telegram_message():
         message = f"{money_qty} {currency_from} = {result} {currency_to}"
         url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={telegram_chat_id}&text={message}"
         # print(requests.get(url).json()) # this sends the message
-        requests.get(url)
+        print("сообщение в телегу: ", requests.get(url))
 
         return redirect(url_for('home.test'))
 
